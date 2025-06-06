@@ -21,13 +21,34 @@ const OVH_USER = process.env.OVH_USER;
 const OVH_PASS = process.env.OVH_PASS;
 const HMAC_SECRET = process.env.HMAC_SECRET;
 
+function getClientIP(req) {
+    return req.headers['x-forwarded-for']?.split(',')[0]?.trim() ||
+        req.headers['x-real-ip'] ||
+        req.connection?.remoteAddress ||
+        req.socket?.remoteAddress ||
+        req.ip ||
+        'unknown';
+}
+
+
 const limiter = rateLimit({
     windowMs: 60 * 1000,
     max: 30,
     standardHeaders: true,
     legacyHeaders: false,
-    message: { error: 'Too many requests, please try again later.' }
+    message: { error: 'Too many requests, please try again later.' },
+    keyGenerator: (req) => {
+        // Generar clave personalizada para rate limiting
+        const clientIP = getClientIP(req);
+        const apiKey = req.headers['x-api-key'] || 'no-key';
+        return `${clientIP}-${apiKey}`;
+    },
+    skip: (req) => {
+        // Opcional: saltar rate limiting para ciertas condiciones
+        return false;
+    }
 });
+
 
 export default async function handler(req, res) {
     try {
@@ -57,9 +78,14 @@ export default async function handler(req, res) {
         }
 
         // Rate limiting
-        await new Promise((resolve, reject) => {
-            limiter(req, res, (err) => err ? reject(err) : resolve());
-        });
+        try {
+            await new Promise((resolve, reject) => {
+                limiter(req, res, (err) => err ? reject(err) : resolve());
+            });
+        } catch (rateLimitError) {
+            console.error('Rate limit error:', rateLimitError);
+            // Si el rate limiting falla, continuamos pero lo registramos
+        }
 
         let body;
         try {
