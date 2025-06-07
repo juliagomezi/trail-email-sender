@@ -1,0 +1,414 @@
+
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Correbars 2025 - Confirmació de Preinscripció</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .header {
+            background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.4)), url('https://i.postimg.cc/YS0NXVRX/unnamed.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            padding: 60px 20px;
+            text-align: center;
+            color: #fff;
+            min-height: 200px;
+            display: table;
+            width: 100%;
+        }
+
+        .header-content {
+            display: table-cell;
+            vertical-align: middle;
+        }
+
+        .header h1 {
+            color: #fff;
+            font-size: 2.2em;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+            margin-bottom: 15px;
+        }
+
+        .registration-id {
+            background: linear-gradient(45deg, #ff6b35, #f7931e);
+            color: #fff;
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-size: 2em;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+            display: inline-block;
+            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .welcome-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .welcome-section h2 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+
+        .info-section {
+            margin: 25px 0;
+        }
+
+        .info-section h3 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+        }
+
+        .info-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        .info-table tr {
+            border-bottom: 1px solid #eee;
+        }
+
+        .info-table td {
+            padding: 12px 15px;
+            vertical-align: top;
+        }
+
+        .info-table td:first-child {
+            background: #f8f9fa;
+            border-left: 4px solid #ff6b35;
+            font-weight: bold;
+            color: #333;
+            width: 40%;
+        }
+
+        .info-table td:last-child {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .price-section {
+            background: linear-gradient(45deg, #11998e, #38ef7d);
+            color: #fff;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            margin: 25px 0;
+        }
+
+        .price-section h3 {
+            font-size: 1.3em;
+            margin-bottom: 10px;
+        }
+
+        .price {
+            font-size: 2.5em;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .payment-info {
+            background: #fff3cd;
+            border: 2px solid #ffeaa7;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .payment-info h3 {
+            color: #856404;
+            margin-bottom: 15px;
+        }
+
+        .payment-dates {
+            background: #fff;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .payment-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .payment-list li {
+            background: #f8f9fa;
+            margin: 8px 0;
+            padding: 10px 15px;
+            border-radius: 5px;
+            border-left: 3px solid #ff6b35;
+        }
+
+        .warning {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+
+        .includes-section {
+            background: #d1ecf1;
+            border: 1px solid #bee5eb;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .includes-section h3 {
+            color: #0c5460;
+            margin-bottom: 15px;
+        }
+
+        .includes-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .includes-list li {
+            background: #fff;
+            margin: 8px 0;
+            padding: 12px 15px;
+            border-radius: 8px;
+            border-left: 4px solid #17a2b8;
+        }
+
+        .footer {
+            background: #343a40;
+            color: #fff;
+            padding: 25px;
+            font-size: 0.85em;
+            line-height: 1.5;
+        }
+
+        .footer h4 {
+            color: #ffc107;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        .footer p {
+            margin-bottom: 15px;
+            color: #ced4da;
+        }
+
+        .footer ul {
+            color: #ced4da;
+            padding-left: 20px;
+            margin: 10px 0;
+        }
+
+        .final-message {
+            background: linear-gradient(45deg, #ff6b35, #f7931e);
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+            font-size: 1.2em;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+
+        /* Fallback para clientes de correo que no soportan background-image */
+        .header-fallback {
+            background-color: #333;
+            display: none;
+        }
+
+        @media screen and (-webkit-min-device-pixel-ratio: 0) {
+            .header-fallback {
+                display: none;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                margin: 10px;
+                border-radius: 10px;
+            }
+
+            .content {
+                padding: 20px;
+            }
+
+            .header {
+                padding: 40px 15px;
+            }
+
+            .header h1 {
+                font-size: 1.8em;
+            }
+
+            .price {
+                font-size: 2em;
+            }
+
+            .info-table td {
+                display: block;
+                width: 100% !important;
+                border: none;
+                padding: 8px 15px;
+            }
+
+            .info-table td:first-child {
+                border-radius: 5px 5px 0 0;
+                border-left: 4px solid #ff6b35;
+            }
+
+            .info-table td:last-child {
+                background: #fff;
+                border-radius: 0 0 5px 5px;
+                border-left: 4px solid #ff6b35;
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <!-- Header con imagen de fondo -->
+    <div class="header">
+        <div class="header-content">
+            <h1>🎉 Correbars Esparreguera 2025 🎉</h1>
+            <div class="registration-id">Número Inscripció: #<?= regId ?></div>
+        </div>
+    </div>
+
+    <div class="content">
+        <!-- Sección de bienvenida -->
+        <div class="welcome-section">
+            <h2>Bones, <?= nombre ?>!</h2>
+            <p>La teva preinscripció al Correbars ha estat rebuda amb èxit! 🥳<br>
+                Et confirmem que formaràs part de la festa més bèstia de l'any!</p>
+        </div>
+
+        <!-- Información de la inscripción usando tabla para mejor compatibilidad -->
+        <div class="info-section">
+            <h3>📋 Resum de la teva inscripció:</h3>
+            <table class="info-table">
+                <tr>
+                    <td>👕 Talla de samarreta:</td>
+                    <td><?= talla ?></td>
+                </tr>
+                <tr>
+                    <td>🍃 Al·lèrgies o intoleràncies:</td>
+                    <td><?= alergias ?></td>
+                </tr>
+                <tr>
+                    <td>🥪 Entrepà escollit:</td>
+                    <td><?= bocata ?></td>
+                </tr>
+                <tr>
+                    <td>🪪 DNI associat:</td>
+                    <td><?= dni ?></td>
+                </tr>
+                <tr>
+                    <td>📅 Data de la inscripció:</td>
+                    <td><?= data ?></td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Precio -->
+        <div class="price-section">
+            <h3>💸 Import a pagar</h3>
+            <div class="price"><?= preuFinal ?> €</div>
+        </div>
+
+        <!-- Información de pago -->
+        <div class="payment-info">
+            <h3>📍 Informació de pagament</h3>
+            <p><strong>Lloc:</strong> Casal Popular Les Canyes (c/ Sant Miquel, nº37)</p>
+            <div class="payment-dates">
+                <p><strong>Dates i horaris:</strong></p>
+                <ul class="payment-list">
+                    <li>📅 Dimecres 11 de juny a les 19:30h</li>
+                    <li>📅 Dijous 12 de juny a les 19:30h</li>
+                </ul>
+            </div>
+            <div class="warning">
+                ⚠️ <strong>Important:</strong> Porta el teu DNI (o una imatge d'aquest) i paga en efectiu abans del <strong>15 de juny</strong>. Si no, la teva entrada es perdrà!
+            </div>
+        </div>
+
+        <!-- Lo que incluye la entrada -->
+        <div class="includes-section">
+            <h3>🎁 L'entrada inclou:</h3>
+            <ul class="includes-list">
+                <li>🍹 6 combinats</li>
+                <li>🍷 2 sangries</li>
+                <li>👕 1 samarreta</li>
+                <li>🥤 1 got reutilitzable</li>
+                <li>🎊 ... i moltes sorpreses més!</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Footer con términos legales -->
+    <div class="footer">
+        <h4>📜 DECLARACIÓ RESPONSABLE I AUTORITZACIONS</h4>
+
+        <p><strong>Compromís de responsabilitat:</strong><br>
+            Sóc major d'edat (major o igual a 18 anys), EM COMPROMETO a seguir les normes i ordres establertes pels organitzadors del Correbars i la Colla de Diables d'Esparreguera, que tindrà lloc el 23 i 24 de juny de 2025 a Esparreguera. Sóc conscient que l'organització té dret a expulsar-me de l'esdeveniment si no compleixo estrictament amb les normes.</p>
+
+        <p><strong>Responsabilitat per danys:</strong><br>
+            En el cas que hi hagi destrosses o desperfectes i se n'identifiqui els autors, aquests s'hauran de fer càrrec de les despeses de reparació.</p>
+
+        <p><strong>Autorització d'imatge:</strong><br>
+            AUTORITZO a la Colla de Diables d'Esparreguera el dret i permís per a captar, enregistrar, usar, publicar, i distribuir imatges meves, a través de qualsevol mitjà de comunicació de la nostra entitat, d'acord amb la llei orgànica 1/1982.</p>
+
+        <p><strong>ℹ️ Informació adicional:</strong></p>
+        <ul>
+            <li>L'aforament de l'acte està limitat a 500 persones</li>
+            <li>L'organització es reserva el dret d'admissió per mantenir un ambient segur i respectuós</li>
+            <li>No s'admetrà cap forma d'agressió</li>
+        </ul>
+    </div>
+
+    <!-- Mensaje final -->
+    <div class="final-message">
+        🔥 Salut i Foc! 🔥<br>
+        Ens veiem al Correbars 2025!
+    </div>
+</div>
+</body>
+</html>
