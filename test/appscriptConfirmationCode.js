@@ -57,7 +57,7 @@ function enviarEntradas(e) {
     var range = e.range;
 
     // Verificar si el cambio fue en la columna 8 (Estado de Pago) y es una casilla marcada
-    if (range.getColumn() == 8 && range.getValue() == true) {
+    if (range.getColumn() == 10 && range.getValue() == true) {
         var row = range.getRow();
 
         // Extraer datos de la fila
@@ -66,21 +66,16 @@ function enviarEntradas(e) {
         var talla = sheet.getRange(row, 3).getValue(); // Talla (columna C)
         var correo = sheet.getRange(row, 4).getValue(); // Email (columna D)
         var dni = sheet.getRange(row, 5).getValue(); // DNI (columna E)
-        var bocata = sheet.getRange(row, 6).getValue(); // Bocadillo (columna F)
+        var bocata = sheet.getRange(row, 8).getValue(); // Bocadillo (columna F)
         var alergias = sheet.getRange(row, 7).getValue() || "Cap"; // Alergias (columna G)
-        var sending = sheet.getRange(row, 9).getValue(); // Estado sending (columna I)
-        var estadoEnvio = sheet.getRange(row, 10).getValue(); // Estado envío (columna J)
-        var fecha = sheet.getRange(row, 11).getValue(); // Fecha inscripción (columna K)
-
-        // Calcular precio final
-        var basePrice = 25;
-        var bocataExtra = bocata !== "❌No, no en vull" ? 3 : 0;
-        var preuFinal = basePrice + bocataExtra;
+        var preuFinal = sheet.getRange(row, 9).getValue();
+        var sending = sheet.getRange(row, 11).getValue(); // Estado sending (columna I)
+        var estadoEnvio = sheet.getRange(row, 12).getValue(); // Estado envío (columna J)
 
         // Solo enviar si no se ha enviado ya y no está en proceso de envío
-        if (estadoEnvio == false && sending == '') {
+        if (estadoEnvio == false && sending == false) {
             // Marcar como "enviando"
-            sheet.getRange(row, 9).setValue('sending');
+            sheet.getRange(row, 11).setValue(true);
 
             try {
                 // Renderizar la plantilla HTML de confirmación
@@ -127,16 +122,16 @@ function enviarEntradas(e) {
                 }
 
                 // Actualizar estado del envío
-                sheet.getRange(row, 10).setValue(envioExitoso);
-                sheet.getRange(row, 9).setValue('');
+                sheet.getRange(row, 12).setValue(envioExitoso);
+                sheet.getRange(row, 11).setValue(false);
 
                 // Registrar en hoja de "Envíos"
                 registrarEnvio(correo, regId, preuFinal, envioExitoso ? 'OK' : 'KO');
 
             } catch (error) {
                 Logger.log('Error general en envío: ' + error);
-                sheet.getRange(row, 10).setValue(false);
-                sheet.getRange(row, 9).setValue('');
+                sheet.getRange(row, 12).setValue(false);
+                sheet.getRange(row, 11).setValue(false);
 
                 // Registrar error en hoja de "Envíos"
                 registrarEnvio(correo, regId, preuFinal, 'ERROR');

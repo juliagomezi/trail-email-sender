@@ -106,19 +106,43 @@ export default async function handler(req, res) {
             return res.status(400).json({ error: 'Subject too long (max 200 chars)' });
         }
 
-        // Validar attachments si existen
+        // Validar attachments si existen con límites más estrictos
+        let totalAttachmentSize = 0;
         if (attachments && Array.isArray(attachments)) {
-            const totalSize = attachments.reduce((acc, att) => {
+            for (let i = 0; i < attachments.length; i++) {
+                const att = attachments[i];
                 if (!att.filename || !att.content || !att.contentType) {
-                    throw new Error('Invalid attachment format');
+                    return res.status(400).json({ 
+                        error: `Invalid attachment format at index ${i}` 
+                    });
                 }
-                // Estimar tamaño del base64 (aprox 4/3 del tamaño original)
-                return acc + (att.content.length * 0.75);
-            }, 0);
+                
+                // Verificar extensiones permitidas
+                const allowedExtensions = ['.pdf', '.txt', '.jpg', '.jpeg', '.png', '.gif', '.doc', '.docx', '.xls', '.xlsx', '.csv'];
+                const fileExt = att.filename.toLowerCase().substring(att.filename.lastIndexOf('.'));
+                if (!allowedExtensions.includes(fileExt)) {
+                    return res.status(400).json({ 
+                        error: `File type not allowed: ${fileExt}. Allowed: ${allowedExtensions.join(', ')}` 
+                    });
+                }
+                
+                // Calcular tamaño del archivo (base64 -> bytes reales)
+                const fileSize = Math.ceil(att.content.length * 0.75);
+                totalAttachmentSize += fileSize;
+                
+                // Límite por archivo individual: 10MB
+                if (fileSize > 10 * 1024 * 1024) {
+                    return res.status(400).json({ 
+                        error: `Attachment "${att.filename}" too large (max 10MB per file)` 
+                    });
+                }
+            }
 
-            // Límite de 25MB total para attachments
-            if (totalSize > 25 * 1024 * 1024) {
-                return res.status(400).json({ error: 'Attachments too large (max 25MB total)' });
+            // Límite total: 15MB (más conservador)
+            if (totalAttachmentSize > 15 * 1024 * 1024) {
+                return res.status(400).json({ 
+                    error: `Total attachments too large (max 15MB total). Current size: ${Math.round(totalAttachmentSize / 1024 / 1024)}MB` 
+                });
             }
         }
 
@@ -140,7 +164,7 @@ export default async function handler(req, res) {
             }
         }
 
-        // Configurar transporter con opciones anti-spam
+        // Configurar transporter con timeouts más largos para adjuntos
         const transporter = nodemailer.createTransport({
             host: 'ssl0.ovh.net',
             port: 465,
@@ -149,25 +173,44 @@ export default async function handler(req, res) {
                 user: OVH_USER,
                 pass: OVH_PASS
             },
-            connectionTimeout: 10000,
-            greetingTimeout: 5000,
-            socketTimeout: 20000,
-            // Configuraciones adicionales para evitar spam
+            connectionTimeout: 30000,  // 30 segundos
+            greetingTimeout: 10000,    // 10 segundos
+            socketTimeout: 60000,      // 60 segundos para adjuntos grandes
             pool: true,
-            maxConnections: 5,
-            maxMessages: 100,
-            rateDelta: 20000,
-            rateLimit: 5
+            maxConnections: 3,         // Menos conexiones concurrentes
+            maxMessages: 50,
+            rateDelta: 30000,          // Más tiempo entre emails
+            rateLimit: 3,              // Menos emails por período
+            // Configuraciones específicas para adjuntos
+            tls: {
+                rejectUnauthorized: false,
+                ciphers: 'SSLv3'
+            }
         });
 
-        // Preparar attachments para nodemailer
+        // Preparar attachments para nodemailer con validación adicional
         let emailAttachments = [];
         if (attachments && Array.isArray(attachments)) {
-            emailAttachments = attachments.map(att => ({
-                filename: att.filename,
-                content: Buffer.from(att.content, 'base64'),
-                contentType: att.contentType
-            }));
+            emailAttachments = attachments.map((att, index) => {
+                try {
+                    // Verificar que el base64 sea válido
+                    const buffer = Buffer.from(att.content, 'base64');
+                    if (buffer.length === 0) {
+                        throw new Error(`Empty attachment content at index ${index}`);
+                    }
+                    
+                    return {
+                        filename: att.filename,
+                        content: buffer,
+                        contentType: att.contentType,
+                        encoding: 'base64',
+                        // Headers adicionales para evitar problemas
+                        cid: `attachment_${index}@correbars.local`
+                    };
+                } catch (error) {
+                    throw new Error(`Invalid base64 content in attachment ${att.filename}: ${error.message}`);
+                }
+            });
         }
 
         // Crear texto plano más limpio para evitar filtros de spam
@@ -180,7 +223,7 @@ export default async function handler(req, res) {
             .replace(/\s+/g, ' ')
             .trim();
 
-        // Configurar email con headers anti-spam
+        // Configurar email con headers optimizados para adjuntos
         const mailOptions = {
             from: {
                 name: 'Correbars Esparreguera',
@@ -191,38 +234,67 @@ export default async function handler(req, res) {
             html: sanitizedHtml,
             text: textContent,
             attachments: emailAttachments,
-            // Headers adicionales para evitar spam
+            // Headers optimizados para adjuntos
             headers: {
                 'X-Mailer': 'Correbars Mailer v1.0',
                 'List-Unsubscribe': `<mailto:${OVH_USER}?subject=Unsubscribe>`,
                 'X-Priority': '3',
                 'X-MSMail-Priority': 'Normal',
                 'Importance': 'Normal',
-                // SPF y DKIM se configuran a nivel de dominio
-                'X-Auto-Response-Suppress': 'OOF, DR, RN, NRN, AutoReply'
+                'X-Auto-Response-Suppress': 'OOF, DR, RN, NRN, AutoReply',
+                // Headers específicos para adjuntos
+                'Content-Type': emailAttachments.length > 0 ? 'multipart/mixed' : 'multipart/alternative',
+                'MIME-Version': '1.0'
             },
             // Configuraciones adicionales
             messageId: `<${Date.now()}.${Math.random().toString(36).substr(2, 9)}@esparreguera.correbars>`,
             date: new Date(),
-            encoding: 'utf-8'
+            encoding: 'utf-8',
+            // Configuraciones específicas para adjuntos grandes
+            disableFileAccess: true,
+            disableUrlAccess: true
         };
 
-        // Enviar email
-        const info = await transporter.sendMail(mailOptions);
+        console.log(`Sending email to ${to} with ${emailAttachments.length} attachments (${Math.round(totalAttachmentSize / 1024)}KB total)`);
+
+        // Enviar email con timeout extendido
+        const emailPromise = transporter.sendMail(mailOptions);
+        const timeoutPromise = new Promise((_, reject) => 
+            setTimeout(() => reject(new Error('Email sending timeout')), 90000) // 90 segundos
+        );
+
+        const info = await Promise.race([emailPromise, timeoutPromise]);
+
+        console.log('Email sent successfully:', {
+            messageId: info.messageId,
+            response: info.response,
+            attachmentCount: emailAttachments.length
+        });
 
         return res.status(200).json({
             ok: true,
             messageId: info.messageId,
             timestamp: new Date().toISOString(),
-            attachmentCount: emailAttachments.length
+            attachmentCount: emailAttachments.length,
+            totalSize: `${Math.round(totalAttachmentSize / 1024)}KB`
         });
 
     } catch (err) {
         console.error('API Error:', {
             message: err.message,
             stack: err.stack,
-            timestamp: new Date().toISOString()
+            timestamp: new Date().toISOString(),
+            hasAttachments: !!(req.body?.attachments?.length)
         });
+
+        // Error específico para problemas de adjuntos
+        if (err.message.includes('attachment') || err.message.includes('base64') || err.message.includes('timeout')) {
+            return res.status(400).json({
+                ok: false,
+                error: 'Attachment processing error: ' + err.message,
+                timestamp: new Date().toISOString()
+            });
+        }
 
         return res.status(500).json({
             ok: false,
