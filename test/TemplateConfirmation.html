@@ -1,0 +1,454 @@
+
+
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Correbars 2025 - Confirmació d'Entrada</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .header {
+            background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.4)), url('https://i.postimg.cc/YS0NXVRX/unnamed.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            padding: 60px 20px;
+            text-align: center;
+            color: #fff;
+            min-height: 200px;
+            display: table;
+            width: 100%;
+        }
+
+        .header-content {
+            display: table-cell;
+            vertical-align: middle;
+        }
+
+        .header h1 {
+            color: #fff;
+            font-size: 2.2em;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+            margin-bottom: 15px;
+        }
+
+        .registration-id {
+            background: linear-gradient(45deg, #28a745, #20c997);
+            color: #fff;
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-size: 2em;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+            display: inline-block;
+            box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .confirmation-section {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: #fff;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .confirmation-section h2 {
+            font-size: 1.8em;
+            margin-bottom: 15px;
+        }
+
+        .confirmation-section p {
+            font-size: 1.1em;
+            line-height: 1.6;
+        }
+
+        .payment-confirmed {
+            background: #d4edda;
+            border: 2px solid #c3e6cb;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .payment-confirmed h3 {
+            color: #155724;
+            margin-bottom: 10px;
+            font-size: 1.4em;
+        }
+
+        .payment-confirmed p {
+            color: #155724;
+            font-size: 1.1em;
+            font-weight: bold;
+        }
+
+        .info-section {
+            margin: 25px 0;
+        }
+
+        .info-section h3 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+        }
+
+        .info-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        .info-table tr {
+            border-bottom: 1px solid #eee;
+        }
+
+        .info-table td {
+            padding: 12px 15px;
+            vertical-align: top;
+        }
+
+        .info-table td:first-child {
+            background: #f8f9fa;
+            border-left: 4px solid #28a745;
+            font-weight: bold;
+            color: #333;
+            width: 40%;
+        }
+
+        .info-table td:last-child {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .important-info {
+            background: #fff3cd;
+            border: 2px solid #ffeaa7;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .important-info h3 {
+            color: #856404;
+            margin-bottom: 15px;
+        }
+
+        .important-info p {
+            color: #856404;
+            font-size: 1.1em;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        .event-info {
+            background: #e7f3ff;
+            border: 2px solid #b3d9ff;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .event-info h3 {
+            color: #004085;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .event-info p {
+            color: #004085;
+            font-size: 1.1em;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .event-details {
+            background: #fff;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .event-details-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .event-details-list li {
+            background: #f8f9fa;
+            margin: 8px 0;
+            padding: 12px 15px;
+            border-radius: 5px;
+            border-left: 3px solid #004085;
+            font-weight: bold;
+            color: #004085;
+        }
+
+        .includes-section {
+            background: #d1ecf1;
+            border: 1px solid #bee5eb;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .includes-section h3 {
+            color: #0c5460;
+            margin-bottom: 15px;
+        }
+
+        .includes-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .includes-list li {
+            background: #fff;
+            margin: 8px 0;
+            padding: 12px 15px;
+            border-radius: 8px;
+            border-left: 4px solid #17a2b8;
+        }
+
+        .footer {
+            background: #343a40;
+            color: #fff;
+            padding: 25px;
+            font-size: 0.85em;
+            line-height: 1.5;
+        }
+
+        .footer h4 {
+            color: #ffc107;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        .footer p {
+            margin-bottom: 15px;
+            color: #ced4da;
+        }
+
+        .footer ul {
+            color: #ced4da;
+            padding-left: 20px;
+            margin: 10px 0;
+        }
+
+        .final-message {
+            background: linear-gradient(45deg, #28a745, #20c997);
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+            font-size: 1.2em;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+
+        .contact-info {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            font-size: 0.9em;
+        }
+
+        /* Fallback para clientes de correo que no soportan background-image */
+        .header-fallback {
+            background-color: #333;
+            display: none;
+        }
+
+        @media screen and (-webkit-min-device-pixel-ratio: 0) {
+            .header-fallback {
+                display: none;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                margin: 10px;
+                border-radius: 10px;
+            }
+
+            .content {
+                padding: 20px;
+            }
+
+            .header {
+                padding: 40px 15px;
+            }
+
+            .header h1 {
+                font-size: 1.8em;
+            }
+
+            .info-table td {
+                display: block;
+                width: 100% !important;
+                border: none;
+                padding: 8px 15px;
+            }
+
+            .info-table td:first-child {
+                border-radius: 5px 5px 0 0;
+                border-left: 4px solid #28a745;
+            }
+
+            .info-table td:last-child {
+                background: #fff;
+                border-radius: 0 0 5px 5px;
+                border-left: 4px solid #28a745;
+                margin-bottom: 10px;
+            }
+
+            .confirmation-section h2 {
+                font-size: 1.5em;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <!-- Header con imagen de fondo -->
+    <div class="header">
+        <div class="header-content">
+            <h1>🎉 Correbars Esparreguera 2025 🎉</h1>
+            <div class="registration-id">Entrada #<?= regId ?></div>
+        </div>
+    </div>
+
+    <div class="content">
+        <!-- Sección de confirmación -->
+        <div class="confirmation-section">
+            <h2>Moltes gràcies per confiar un any més en nosaltres!</h2>
+            <p>Bones, <?= nombre ?>!<br>
+                Adjunta trobaràs l'entrada. El pagament s'ha realitzat correctament! 🥳</p>
+        </div>
+
+        <!-- Confirmación de pago -->
+        <div class="payment-confirmed">
+            <h3>✅ Pagament Confirmat</h3>
+            <p>Import pagat: <?= preuFinal ?> €</p>
+        </div>
+
+        <!-- Información del evento -->
+        <div class="event-info">
+            <h3>🎊 Informació de l'esdeveniment</h3>
+            <p><strong>Un any més, per Sant Joan, torna el Correbars a Esparreguera! Vine amb ganes de festa i de passar la millor nit de l'any.</strong></p>
+
+            <div class="event-details">
+                <ul class="event-details-list">
+                    <li>📅 <strong>Data:</strong> 23 de juny de 2025</li>
+                    <li>🚪 <strong>Obertura de portes:</strong> 20:00h</li>
+                    <li>⏰ <strong>Hora límit d'accés:</strong> 21:00h</li>
+                    <li>📍 <strong>Ubicació:</strong> Antic Escorxador d'Esparreguera</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Información importante -->
+        <div class="important-info">
+            <h3>⚠️ Important - Documentació necessària</h3>
+            <p><strong>Recorda portar aquesta entrada i el DNI el dia de l'esdeveniment, seran necessaris per entrar al recinte.</strong></p>
+            <p><strong>Atenció:</strong> L'accés al recinte es tancarà a les 21:00h. Assegura't d'arribar abans d'aquesta hora!</p>
+        </div>
+
+        <!-- Información de la inscripción -->
+        <div class="info-section">
+            <h3>📋 Resum de la teva entrada:</h3>
+            <table class="info-table">
+                <tr>
+                    <td>👕 Talla de samarreta:</td>
+                    <td><?= talla ?></td>
+                </tr>
+                <tr>
+                    <td>🍃 Al·lèrgies o intoleràncies:</td>
+                    <td><?= alergias ?></td>
+                </tr>
+                <tr>
+                    <td>🥪 Entrepà escollit:</td>
+                    <td><?= bocata ?></td>
+                </tr>
+                <tr>
+                    <td>🪪 DNI associat:</td>
+                    <td><?= dni ?></td>
+                </tr>
+                <tr>
+                    <td>📅 Data de pagament:</td>
+                    <td><?= data ?></td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Lo que incluye la entrada -->
+        <div class="includes-section">
+            <h3>🎁 L'entrada inclou:</h3>
+            <ul class="includes-list">
+                <li>🍹 6 combinats</li>
+                <li>🍷 2 sangries</li>
+                <li>👕 1 samarreta</li>
+                <li>🥤 1 got reutilitzable</li>
+                <li>🎊 ... i moltes sorpreses més!</li>
+            </ul>
+        </div>
+
+        <!-- Información de contacto -->
+        <div class="contact-info">
+            <p><strong>ℹ️ Nota:</strong> En cas de necessitar qualsevol canvi o cancel·lació, ens podeu contactar a través d'Instagram: <a href="https://www.instagram.com/correbars_esparreguera/" target="_blank" style="color: #ff6b35;">@correbars_esparreguera</a></p>
+        </div>
+    </div>
+
+    <!-- Footer con términos legales -->
+    <div class="footer">
+        <p><strong>ℹ️ Recordatori important:</strong><br>
+            L'organització del Correbars té reservat el dret d'admissió per tal de mantenir un ambient segur i respectuós entre els i les participants. En aquest sentit, no s'admetrà cap forma d'agressió, i es reserva el dret d'expulsar de l'activitat als responsables.</p>
+
+        <p><strong>ℹ️ Informació adicional:</strong></p>
+        <ul>
+            <li>L'aforament de l'acte està limitat a 500 persones</li>
+            <li>L'organització es reserva el dret d'admissió per mantenir un ambient segur i respectuós</li>
+            <li>No s'admetrà cap forma d'agressió</li>
+        </ul>
+    </div>
+
+    <!-- Mensaje final -->
+    <div class="final-message">
+        🔥 Salut i Foc! 🔥<br>
+        Ens veiem al Correbars 2025!
+    </div>
+</div>
+</body>
+</html>

@@ -2,7 +2,6 @@ import nodemailer from 'nodemailer';
 import rateLimit from 'express-rate-limit';
 import crypto from 'crypto';
 
-
 // Función para validar email
 function isValidEmail(email) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -30,7 +29,6 @@ function getClientIP(req) {
         'unknown';
 }
 
-
 const limiter = rateLimit({
     windowMs: 60 * 1000,
     max: 30,
@@ -38,17 +36,14 @@ const limiter = rateLimit({
     legacyHeaders: false,
     message: { error: 'Too many requests, please try again later.' },
     keyGenerator: (req) => {
-        // Generar clave personalizada para rate limiting
         const clientIP = getClientIP(req);
         const apiKey = req.headers['x-api-key'] || 'no-key';
         return `${clientIP}-${apiKey}`;
     },
     skip: (req) => {
-        // Opcional: saltar rate limiting para ciertas condiciones
         return false;
     }
 });
-
 
 export default async function handler(req, res) {
     try {
@@ -84,7 +79,6 @@ export default async function handler(req, res) {
             });
         } catch (rateLimitError) {
             console.error('Rate limit error:', rateLimitError);
-            // Si el rate limiting falla, continuamos pero lo registramos
         }
 
         let body;
@@ -95,7 +89,7 @@ export default async function handler(req, res) {
             return res.status(400).json({ error: 'Invalid JSON format' });
         }
 
-        const { to, subject, html, signature } = body;
+        const { to, subject, html, signature, attachments } = body;
 
         // Validaciones
         if (!to || !subject || !html) {
@@ -110,6 +104,22 @@ export default async function handler(req, res) {
 
         if (subject.length > 200) {
             return res.status(400).json({ error: 'Subject too long (max 200 chars)' });
+        }
+
+        // Validar attachments si existen
+        if (attachments && Array.isArray(attachments)) {
+            const totalSize = attachments.reduce((acc, att) => {
+                if (!att.filename || !att.content || !att.contentType) {
+                    throw new Error('Invalid attachment format');
+                }
+                // Estimar tamaño del base64 (aprox 4/3 del tamaño original)
+                return acc + (att.content.length * 0.75);
+            }, 0);
+
+            // Límite de 25MB total para attachments
+            if (totalSize > 25 * 1024 * 1024) {
+                return res.status(400).json({ error: 'Attachments too large (max 25MB total)' });
+            }
         }
 
         const sanitizedHtml = sanitizeHtml(html);
@@ -130,7 +140,7 @@ export default async function handler(req, res) {
             }
         }
 
-        // Configurar transporter
+        // Configurar transporter con opciones anti-spam
         const transporter = nodemailer.createTransport({
             host: 'ssl0.ovh.net',
             port: 465,
@@ -141,22 +151,70 @@ export default async function handler(req, res) {
             },
             connectionTimeout: 10000,
             greetingTimeout: 5000,
-            socketTimeout: 20000
+            socketTimeout: 20000,
+            // Configuraciones adicionales para evitar spam
+            pool: true,
+            maxConnections: 5,
+            maxMessages: 100,
+            rateDelta: 20000,
+            rateLimit: 5
         });
 
-        // Enviar email
-        const info = await transporter.sendMail({
-            from: `"Correbars Esparreguera" <${OVH_USER}>`,
+        // Preparar attachments para nodemailer
+        let emailAttachments = [];
+        if (attachments && Array.isArray(attachments)) {
+            emailAttachments = attachments.map(att => ({
+                filename: att.filename,
+                content: Buffer.from(att.content, 'base64'),
+                contentType: att.contentType
+            }));
+        }
+
+        // Crear texto plano más limpio para evitar filtros de spam
+        const textContent = html
+            .replace(/<[^>]*>/g, '')
+            .replace(/&nbsp;/g, ' ')
+            .replace(/&amp;/g, '&')
+            .replace(/&lt;/g, '<')
+            .replace(/&gt;/g, '>')
+            .replace(/\s+/g, ' ')
+            .trim();
+
+        // Configurar email con headers anti-spam
+        const mailOptions = {
+            from: {
+                name: 'Correbars Esparreguera',
+                address: OVH_USER
+            },
             to,
             subject,
             html: sanitizedHtml,
-            text: html.replace(/<[^>]*>/g, '')
-        });
+            text: textContent,
+            attachments: emailAttachments,
+            // Headers adicionales para evitar spam
+            headers: {
+                'X-Mailer': 'Correbars Mailer v1.0',
+                'List-Unsubscribe': `<mailto:${OVH_USER}?subject=Unsubscribe>`,
+                'X-Priority': '3',
+                'X-MSMail-Priority': 'Normal',
+                'Importance': 'Normal',
+                // SPF y DKIM se configuran a nivel de dominio
+                'X-Auto-Response-Suppress': 'OOF, DR, RN, NRN, AutoReply'
+            },
+            // Configuraciones adicionales
+            messageId: `<${Date.now()}.${Math.random().toString(36).substr(2, 9)}@esparreguera.correbars>`,
+            date: new Date(),
+            encoding: 'utf-8'
+        };
+
+        // Enviar email
+        const info = await transporter.sendMail(mailOptions);
 
         return res.status(200).json({
             ok: true,
             messageId: info.messageId,
-            timestamp: new Date().toISOString()
+            timestamp: new Date().toISOString(),
+            attachmentCount: emailAttachments.length
         });
 
     } catch (err) {
