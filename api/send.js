@@ -181,11 +181,6 @@ export default async function handler(req, res) {
             maxMessages: 50,
             rateDelta: 30000,          // Más tiempo entre emails
             rateLimit: 3,              // Menos emails por período
-            // Configuraciones específicas para adjuntos
-            tls: {
-                rejectUnauthorized: false,
-                ciphers: 'SSLv3'
-            }
         });
 
         // Preparar attachments para nodemailer con validación adicional
