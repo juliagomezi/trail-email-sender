@@ -116,7 +116,7 @@ function onFormSubmit(e) {
     // ===== 4) Enviar por tu API de Vercel (o GmailApp para debug) =====
     let envioExitoso = false;
     try {
-        sendViaVercel(emailDest, `🍻 PREINSCRIPCIÓ CORREBARS 2025 🍻 #${newId}`, htmlBody);
+        sendViaVercel(emailDest, `🍻 LLISTA ESPERA CORREBARS 2025 🍻 #${newId}`, htmlBody);
         envioExitoso = true;
     } catch (err) {
         Logger.log('Falló envío Vercel: ' + err);
@@ -126,7 +126,7 @@ function onFormSubmit(e) {
             MailApp.sendEmail({
                 to: emailDest,
                 name: "Organització Correbars 2025",
-                subject: `🍻 PREINSCRIPCIÓ CORREBARS 2025 🍻 #${newId}`,
+                subject: `🍻 LLISTA ESPERA CORREBARS 2025 🍻 #${newId}`,
                 htmlBody: htmlBody
             });
             envioExitoso = true;
@@ -186,7 +186,7 @@ function retryFailedEmail(e) {
         // ===== 4) Enviar por tu API de Vercel (o GmailApp para debug) =====
         let envioExitoso = false;
         try {
-            sendViaVercel(emailDest, `🍻 PREINSCRIPCIÓ CORREBARS 2025 🍻 #${newId}`, htmlBody);
+            sendViaVercel(emailDest, `🍻 LLISTA ESPERA CORREBARS 2025 🍻 #${newId}`, htmlBody);
             envioExitoso = true;
         } catch (err) {
             Logger.log('Falló envío Vercel: ' + err);
@@ -196,7 +196,7 @@ function retryFailedEmail(e) {
                 MailApp.sendEmail({
                     to: emailDest,
                     name: "Organització Correbars 2025",
-                    subject: `🍻 PREINSCRIPCIÓ CORREBARS 2025 🍻 #${newId}`,
+                    subject: `🍻 LLISTA ESPERA CORREBARS 2025 🍻 #${newId}`,
                     htmlBody: htmlBody
                 });
                 envioExitoso = true;

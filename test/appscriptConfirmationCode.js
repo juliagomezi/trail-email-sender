@@ -161,7 +161,7 @@ function crearPDF(nombre, numeroEntrada, bocata) {
 
         // Convertir el documento a PDF
         var pdf = DriveApp.getFileById(copyId).getAs('application/pdf');
-        pdf.setName("Entrada Correbars 2025 - " + nombre + " #" + numeroEntrada);
+        pdf.setName("Entrada Correbars 2025 - " + nombre + " #" + numeroEntrada + ".pdf");
 
         // Eliminar la copia del documento
         DriveApp.getFileById(copyId).setTrashed(true);
