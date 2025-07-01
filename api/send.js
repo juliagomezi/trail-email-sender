@@ -184,7 +184,7 @@ export default async function handler(req, res) {
                         contentType: att.contentType,
                         encoding: 'base64',
                         // Headers adicionales para evitar problemas
-                        cid: `attachment_${index}@correbars.local`
+                        cid: `attachment_${index}@trail.local`
                     };
                 } catch (error) {
                     throw new Error(`Invalid base64 content in attachment ${att.filename}: ${error.message}`);
@@ -205,7 +205,7 @@ export default async function handler(req, res) {
         // Configurar email con headers optimizados para adjuntos
         const mailOptions = {
             from: {
-                name: 'Correbars Esparreguera',
+                name: 'Trail Intercasteller',
                 address: STRATO_USER
             },
             to,
@@ -214,7 +214,7 @@ export default async function handler(req, res) {
             attachments: emailAttachments,
             // Headers optimizados para adjuntos
             headers: {
-                'X-Mailer': 'Correbars Mailer v1.0',
+                'X-Mailer': 'Trail Mailer v1.0',
                 'List-Unsubscribe': `<mailto:${STRATO_USER}?subject=Unsubscribe>`,
                 'X-Priority': '3',
                 'X-MSMail-Priority': 'Normal',
