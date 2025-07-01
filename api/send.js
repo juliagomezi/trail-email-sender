@@ -16,8 +16,8 @@ function sanitizeHtml(html) {
 }
 
 const API_KEY = process.env.API_KEY;
-const OVH_USER = process.env.OVH_USER;
-const OVH_PASS = process.env.OVH_PASS;
+const STRATO_USER = process.env.STRATO_USER;
+const STRATO_PASSWORD = process.env.STRATO_PASSWORD;
 const HMAC_SECRET = process.env.HMAC_SECRET;
 
 function getClientIP(req) {
@@ -62,7 +62,7 @@ export default async function handler(req, res) {
         }
 
         // Verificar variables de entorno críticas
-        if (!API_KEY || !OVH_USER || !OVH_PASS) {
+        if (!API_KEY || !STRATO_USER || !STRATO_PASSWORD) {
             console.error('Missing environment variables');
             return res.status(500).json({ error: 'Server configuration error' });
         }
@@ -148,30 +148,14 @@ export default async function handler(req, res) {
 
         const sanitizedHtml = sanitizeHtml(html);
 
-        // HMAC validation solo en producción
-        const isProduction = process.env.NODE_ENV === 'production';
-        if (HMAC_SECRET && isProduction) {
-            if (!signature) {
-                return res.status(403).json({ error: 'Signature required' });
-            }
-
-            const hmac = crypto.createHmac('sha256', HMAC_SECRET);
-            hmac.update(to + subject + html);
-            const expected = hmac.digest('hex');
-
-            if (signature !== expected) {
-                return res.status(403).json({ error: 'Invalid signature' });
-            }
-        }
-
         // Configurar transporter con timeouts más largos para adjuntos
         const transporter = nodemailer.createTransport({
-            host: 'ssl0.ovh.net',
+            host: 'smtp.strato.de',
             port: 465,
             secure: true,
             auth: {
-                user: OVH_USER,
-                pass: OVH_PASS
+                user: STRATO_USER,
+                pass: STRATO_PASSWORD
             },
             connectionTimeout: 30000,  // 30 segundos
             greetingTimeout: 10000,    // 10 segundos
@@ -222,7 +206,7 @@ export default async function handler(req, res) {
         const mailOptions = {
             from: {
                 name: 'Correbars Esparreguera',
-                address: OVH_USER
+                address: STRATO_USER
             },
             to,
             subject,
@@ -231,7 +215,7 @@ export default async function handler(req, res) {
             // Headers optimizados para adjuntos
             headers: {
                 'X-Mailer': 'Correbars Mailer v1.0',
-                'List-Unsubscribe': `<mailto:${OVH_USER}?subject=Unsubscribe>`,
+                'List-Unsubscribe': `<mailto:${STRATO_USER}?subject=Unsubscribe>`,
                 'X-Priority': '3',
                 'X-MSMail-Priority': 'Normal',
                 'Importance': 'Normal',
@@ -241,7 +225,7 @@ export default async function handler(req, res) {
                 'MIME-Version': '1.0'
             },
             // Configuraciones adicionales
-            messageId: `<${Date.now()}.${Math.random().toString(36).substr(2, 9)}@esparreguera.correbars>`,
+            messageId: `<${Date.now()}.${Math.random().toString(36).substr(2, 9)}@trail>`,
             date: new Date(),
             encoding: 'utf-8',
             // Configuraciones específicas para adjuntos grandes
