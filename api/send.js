@@ -89,7 +89,7 @@ export default async function handler(req, res) {
             return res.status(400).json({ error: 'Invalid JSON format' });
         }
 
-        const { to, subject, html, signature, attachments } = body;
+        const { to, subject, html, attachments } = body;
 
         // Validaciones
         if (!to || !subject || !html) {
@@ -184,7 +184,7 @@ export default async function handler(req, res) {
                         contentType: att.contentType,
                         encoding: 'base64',
                         // Headers adicionales para evitar problemas
-                        cid: `attachment_${index}@trail.local`
+                        cid: `attachment_${index}@trailintercasteller.local`
                     };
                 } catch (error) {
                     throw new Error(`Invalid base64 content in attachment ${att.filename}: ${error.message}`);
@@ -210,6 +210,7 @@ export default async function handler(req, res) {
             },
             to,
             subject,
+            text: "test" ,
             html: sanitizedHtml,
             attachments: emailAttachments,
             // Headers optimizados para adjuntos

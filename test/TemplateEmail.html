@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Correbars 2025 - Confirmació de Preinscripció</title>
+    <title>Trail Intercasteller 2025 - Confirmació de Preinscripció</title>
     <style>
         * {
             margin: 0;
@@ -308,7 +308,7 @@
     <!-- Header con imagen de fondo -->
     <div class="header">
         <div class="header-content">
-            <h1>🎉 Correbars Esparreguera 2025 🎉</h1>
+            <h1>🎉 Trail Intercasteller 2025 🎉</h1>
             <div class="registration-id">Número Inscripció: #<?= regId ?></div>
         </div>
     </div>
@@ -317,8 +317,8 @@
         <!-- Sección de bienvenida -->
         <div class="welcome-section">
             <h2>Bones, <?= nombre ?>!</h2>
-            <p>La teva preinscripció al Correbars ha estat rebuda amb èxit! 🥳<br>
-                Et confirmem que formaràs part de la festa més bèstia de l'any!</p>
+            <p>La teva preinscripció al Trail Intercasteller ha estat rebuda amb èxit! 🥳<br>
+                Completa el pagament per confirmar la Inscripció</p>
         </div>
 
         <!-- Información de la inscripción usando tabla para mejor compatibilidad -->
@@ -342,6 +342,10 @@
                     <td><?= dni ?></td>
                 </tr>
                 <tr>
+                    <td>🧑‍🤝‍🧑 Colla:</td>
+                    <td><?= dni ?></td>
+                </tr>
+                <tr>
                     <td>📅 Data de la inscripció:</td>
                     <td><?= data ?></td>
                 </tr>
@@ -356,17 +360,12 @@
 
         <!-- Información de pago -->
         <div class="payment-info">
-            <h3>📍 Informació de pagament</h3>
-            <p><strong>Lloc:</strong> Casal Popular Les Canyes (c/ Sant Miquel, nº37)</p>
+            <h3>Link de pagament</h3>
             <div class="payment-dates">
-                <p><strong>Dates i horaris:</strong></p>
-                <ul class="payment-list">
-                    <li>📅 Dimecres 11 de juny a les 19:30h</li>
-                    <li>📅 Dijous 12 de juny a les 19:30h</li>
-                </ul>
+                <?= link_pagament ?>
             </div>
             <div class="warning">
-                ⚠️ <strong>Important:</strong> Porta el teu DNI (o una imatge d'aquest) i paga en efectiu abans del <strong>15 de juny</strong>. Si no, la teva entrada es perdrà!
+                ⚠️ <strong>Important:</strong> La inscripció no es considera fins que el pagament està fet. Fes-lo abans del <strong>8 de novembre</strong>. Si no, la teva entrada es perdrà!
             </div>
         </div>
 
@@ -374,10 +373,10 @@
         <div class="includes-section">
             <h3>🎁 L'entrada inclou:</h3>
             <ul class="includes-list">
-                <li>🍹 6 combinats</li>
-                <li>🍷 2 sangries</li>
+                <li>🏃‍♀️ 1 dorsal</li>
                 <li>👕 1 samarreta</li>
                 <li>🥤 1 got reutilitzable</li>
+                <li>🥪 1 Entrepà</li>
                 <li>🎊 ... i moltes sorpreses més!</li>
             </ul>
         </div>
@@ -388,13 +387,10 @@
         <h4>📜 DECLARACIÓ RESPONSABLE I AUTORITZACIONS</h4>
 
         <p><strong>Compromís de responsabilitat:</strong><br>
-            Sóc major d'edat (major o igual a 18 anys), EM COMPROMETO a seguir les normes i ordres establertes pels organitzadors del Correbars i la Colla de Diables d'Esparreguera, que tindrà lloc el 23 i 24 de juny de 2025 a Esparreguera. Sóc conscient que l'organització té dret a expulsar-me de l'esdeveniment si no compleixo estrictament amb les normes.</p>
-
-        <p><strong>Responsabilitat per danys:</strong><br>
-            En el cas que hi hagi destrosses o desperfectes i se n'identifiqui els autors, aquests s'hauran de fer càrrec de les despeses de reparació.</p>
+            Sóc major d'edat (major o igual a 18 anys), EM COMPROMETO a seguir les normes i ordres establertes pels organitzadors del Correbars i la Colla de Diables d'Esparreguera, que tindrà lloc el 22 de novembre de 2025 a Esparreguera. Sóc conscient que l'organització té dret a expulsar-me de l'esdeveniment si no compleixo estrictament amb les normes.</p>
 
         <p><strong>Autorització d'imatge:</strong><br>
-            AUTORITZO a la Colla de Diables d'Esparreguera el dret i permís per a captar, enregistrar, usar, publicar, i distribuir imatges meves, a través de qualsevol mitjà de comunicació de la nostra entitat, d'acord amb la llei orgànica 1/1982.</p>
+            AUTORITZO a la Colla de Castellers d'Esparreguera el dret i permís per a captar, enregistrar, usar, publicar, i distribuir imatges meves, a través de qualsevol mitjà de comunicació de la nostra entitat, d'acord amb la llei orgànica 1/1982.</p>
 
         <p><strong>ℹ️ Informació adicional:</strong></p>
         <ul>
@@ -406,8 +402,7 @@
 
     <!-- Mensaje final -->
     <div class="final-message">
-        🔥 Salut i Foc! 🔥<br>
-        Ens veiem al Correbars 2025!
+        Ens veiem al Trail Intercasteller 2025 🎉!
     </div>
 </div>
 </body>
