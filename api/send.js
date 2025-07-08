@@ -1,6 +1,5 @@
 import nodemailer from 'nodemailer';
 import rateLimit from 'express-rate-limit';
-import crypto from 'crypto';
 
 // Función para validar email
 function isValidEmail(email) {
@@ -18,7 +17,6 @@ function sanitizeHtml(html) {
 const API_KEY = process.env.API_KEY;
 const STRATO_USER = process.env.STRATO_USER;
 const STRATO_PASSWORD = process.env.STRATO_PASSWORD;
-const HMAC_SECRET = process.env.HMAC_SECRET;
 
 function getClientIP(req) {
     return req.headers['x-forwarded-for']?.split(',')[0]?.trim() ||
@@ -210,7 +208,6 @@ export default async function handler(req, res) {
             },
             to,
             subject,
-            text: "test" ,
             html: sanitizedHtml,
             attachments: emailAttachments,
             // Headers optimizados para adjuntos
