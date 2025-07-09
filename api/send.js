@@ -208,6 +208,7 @@ export default async function handler(req, res) {
             },
             to,
             subject,
+            text: 'test',
             html: sanitizedHtml,
             attachments: emailAttachments,
             // Headers optimizados para adjuntos
