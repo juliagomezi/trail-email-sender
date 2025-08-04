@@ -61,3 +61,60 @@ function onFormSubmit(e) {
 
   sendViaVercel(email, "Preinscripció Trail Intercasteller 2025", htmlBody);
 }
+
+function testNextOnFormSubmit() {
+  const fakeEvent = {
+    range: {
+      getRow: () => 43 // por ejemplo, la fila 5
+    },
+    namedValues: {
+      "Adreça electrònica": ["juliagoes2000@gmail.com"],
+      "Modalitat del trail": ["Mitja Marató"],
+      "Nom i cognoms": ["Júlia"],
+      "Marca de temps": ["2025-08-04 10:00:00"],
+      "DNI": ["12345678A"],
+      "Telèfon de contacte": ["600123456"],
+      "Colla": ["Els Valents"],
+      "Categoria": ["Sènior"],
+      "Talla de la samarreta": ["M"],
+      "Entrepà": ["Vegetarià"],
+      "Al·lèrgies o intoleràncies": ["Cap"]
+    }
+  };
+
+  nextOnFormSubmit(fakeEvent);
+}
+
+
+function nextOnFormSubmit(e) {
+  var range = e.range
+  var sheetRow = range.getRow();
+
+  var responses = e.namedValues;
+  var email = responses["Adreça electrònica"][0];
+  var trailMode = responses["Modalitat del trail"][0];
+  // var priceId = PRICE_ID_MAP[trailMode]; // TODO REVERT
+  var priceId = "price_1RsQxMCZZbe06Saa4yMQ02Ua"
+
+  if (!priceId) return;
+  // Render HTML template
+  const tpl = HtmlService.createTemplateFromFile("PreinscriptionEmail");
+  tpl.idCorredor = sheetRow;
+  tpl.nomCorredor = responses["Nom i cognoms"][0];
+  tpl.dataInscripcio = responses["Marca de temps"][0];
+  tpl.dni = responses["DNI"][0];
+  tpl.telefon = responses["Telèfon de contacte"][0];
+  tpl.colla = responses["Colla"][0];
+  tpl.modalitatTrail = trailMode;
+  tpl.categoria = responses["Categoria"][0];
+  tpl.tallaSamarreta = responses["Talla de la samarreta"][0];
+  tpl.entrepa = responses["Entrepà"][0];
+  tpl.alergies = responses["Al·lèrgies o intoleràncies"][0];
+  tpl.preu = PRICE_MAP[trailMode];
+  tpl.linkWebPagament = CreatePaymentLink(email, priceId); // TODO linkWebPagament -> linkPagament (tant aqui com al PreinscriptionEmail.html)
+
+  const htmlBody = tpl.evaluate().getContent();
+
+  sendViaVercel(email, "Preinscripció Trail Intercasteller 2025", htmlBody);
+}
+
