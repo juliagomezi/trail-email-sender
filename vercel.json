@@ -4,6 +4,10 @@
     {
       "src": "api/send.js",
       "use": "@vercel/node"
+    },
+    {
+      "src": "api/google-post-proxy.js",
+      "use": "@vercel/node"
     }
   ],
   "routes": [
