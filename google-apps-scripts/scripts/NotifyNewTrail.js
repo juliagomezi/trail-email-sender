@@ -1,4 +1,4 @@
-function processEmails() {
+function notifyLastYearPartipants() {
   const actualTrailSheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
   const lastTrailSheet = SpreadsheetApp.openById('1tK30n0Hkntvq7vaOo200eQUhi1DB5ied0DjlbQWOltU').getSheets()[0]; // primer full del segon spreadsheet
 
@@ -26,19 +26,19 @@ function processEmails() {
     }
 
     if (!found) {
-      sendEmail(name, email); // Acció a fer si no hi és
+      sendEmailLastYearPartipants(name, email); // Acció a fer si no hi és
       Utilities.sleep(5000)
     }
   }
 }
 
 function testSendEmail() {
-  sendEmail("Albert Campaña Soler", "albert.campanya.soler@gmail.com")
+  sendEmailLastYearPartipants("Albert Campaña Soler", "albert.campanya.soler@gmail.com")
 }
 
 // Aquesta és una funció dummy d'exemple
-function sendEmail(name, email) {
-  const tpl = HtmlService.createTemplateFromFile("NewTrailEmail");
+function sendEmailLastYearPartipants(name, email) {
+  const tpl = HtmlService.createTemplateFromFile("NotifyNewTrailEmail");
   tpl.nomCorredor = name;
 
   const htmlBody = tpl.evaluate().getContent();

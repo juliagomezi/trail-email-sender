@@ -1,12 +1,13 @@
-function CreatePaymentLink(email, priceId) {
+function createPaymentLink(row, email, priceId) {
   const STRIPE_SECRET_KEY = PropertiesService.getScriptProperties().getProperty('STRIPE_SECRET_KEY');
 
   const payload = {
     "line_items[0][price]": priceId,
     "line_items[0][quantity]": "1",
     "after_completion[type]": "redirect",
-    "after_completion[redirect][url]": `https://script.google.com/macros/s/AKfycbxtkq7ZpQBgELFJypSfMZdPmgeUmr85ZucmQCfdm6m-puvP6r7hFZpbFIVOmTB-l0ee/exec?email=${encodeURIComponent(email)}`,
+    "after_completion[redirect][url]": `https://sites.google.com/view/trail-intercasteller-sucess/p%C3%A0gina-principal`,
     "metadata[customer_email]": email,
+    "metadata[customer_row]": row,
   };
 
   const options = {
@@ -21,49 +22,28 @@ function CreatePaymentLink(email, priceId) {
   const response = UrlFetchApp.fetch('https://api.stripe.com/v1/payment_links', options);
   const paymentLink = JSON.parse(response.getContentText()).url;
   const paymentLinkId = JSON.parse(response.getContentText()).id;
-  Logger.log(paymentLink);
-  Logger.log(paymentLinkId);
 
   var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Respostes al formulari");
   var values = sheet.getDataRange().getValues();
   var headers = values[0];
-  var paymentLinkColumn = headers.indexOf("Link de pagament");
-  var paymentLinkIdColumn = headers.indexOf("Id link de pagament");
-
-  userRow = GetUserRow(email)
+  var paymentLinkColumn = headers.indexOf("Link de pagament") + 1;
+  var paymentLinkIdColumn = headers.indexOf("Id link de pagament") + 1;
   
-  sheet.getRange(userRow + 1, paymentLinkColumn + 1).setValue(paymentLink);
-  sheet.getRange(userRow + 1, paymentLinkIdColumn + 1).setValue(paymentLinkId);
-
+  sheet.getRange(row, paymentLinkColumn).setValue(paymentLink);
+  sheet.getRange(row, paymentLinkIdColumn).setValue(paymentLinkId);
+  
+  Logger.log(`Created payment link for ${email} in row ${row}: payment link ${paymentLink} and paymentLinkId ${paymentLinkId}`);
+  return paymentLink;
 }
 
-function GetUserRow(email) {
-  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Respostes al formulari");
-  var values = sheet.getDataRange().getValues();
-  var headers = values[0];
-  var emailColumn = headers.indexOf("Adreça electrònica");
-  for (var i = 1; i < values.length; i++) {
-    if (values[i][emailColumn] === email) {
-      Logger.log("Email found %s", email);
-      Logger.log("Email found in row %s", i);
-      return i
-    }
-  }
-}
-
-function GetUserPaymentLinkId(email) {
+function disablePaymentLink(row) {
   var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Respostes al formulari");
   var values = sheet.getDataRange().getValues();
   var headers = values[0];
   var paymentLinkIdColumn = headers.indexOf("Id link de pagament");
-  var userRow = GetUserRow(email)
-  return values[userRow][paymentLinkIdColumn]
-}
-
-function DisablePaymentLink(email) {
-  var paymentLinkId = GetUserPaymentLinkId(email)
+  var paymentLinkId = values[row-1][paymentLinkIdColumn];
   const STRIPE_SECRET_KEY = PropertiesService.getScriptProperties().getProperty('STRIPE_SECRET_KEY');
-
+  
   const payload = {
     active: "false"
   };
