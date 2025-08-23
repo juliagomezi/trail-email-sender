@@ -10,6 +10,10 @@
     {
       "src": "/api/send",
       "dest": "/api/send.js"
+    },
+    {
+      "src": "/api/google-post-proxy",
+      "dest": "/api/google-post-proxy.js"
     }
   ]
 }
