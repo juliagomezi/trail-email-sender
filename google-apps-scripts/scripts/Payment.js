@@ -42,8 +42,9 @@ function disablePaymentLink(row) {
   var headers = values[0];
   var paymentLinkIdColumn = headers.indexOf("Id link de pagament");
   var paymentLinkId = values[row-1][paymentLinkIdColumn];
+  Logger.log(`Disabeling payment link id ${paymentLinkId}`);
   const STRIPE_SECRET_KEY = PropertiesService.getScriptProperties().getProperty('STRIPE_SECRET_KEY');
-  
+
   const payload = {
     active: "false"
   };
@@ -61,5 +62,5 @@ function disablePaymentLink(row) {
   const response = UrlFetchApp.fetch(url, options);
   const data = JSON.parse(response.getContentText());
   
-  Logger.log(`Payment Link ${url} desactivado: ${data.active === false}`);
+  Logger.log(`Payment Link ${url} disabled: ${data.active === false}`);
 }

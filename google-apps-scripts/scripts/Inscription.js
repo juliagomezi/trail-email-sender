@@ -15,7 +15,6 @@ function sendInscriptionEmail(rowValues, rowNumber, email, inscriptionTimeFormat
   const htmlBody = tpl.evaluate().getContent();
 
   sendViaVercelAttachment(email, "Inscripció Trail Intercasteller 2025", htmlBody);
-  return tpl.evaluate().setTitle("Inscripció Trail Intercasteller 2025");
 }
 
 function oldDoGet(e) {
@@ -66,6 +65,7 @@ function doPost(e) {
     var obj = payload.data.object;
     var email = obj.metadata.customer_email;
     var row = obj.metadata.customer_row;
+    Logger.log(`doPost for ${email}`);
     
     var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Respostes al formulari");
     var values = sheet.getDataRange().getValues();
@@ -74,8 +74,14 @@ function doPost(e) {
     var inscriptionTime = new Date();
     var inscriptionTimeFormatted = Utilities.formatDate(inscriptionTime, Session.getScriptTimeZone(), "dd/MM/yyyy HH:mm:ss");
     sheet.getRange(row, paymentColumn).setValue(inscriptionTimeFormatted);
+    Logger.log(`doPost for ${email}: set paid at ${inscriptionTimeFormatted}`);
     disablePaymentLink(row);
-    return sendInscriptionEmail(values[row-1], row, email, inscriptionTimeFormatted);
+    Logger.log(`doPost for ${email}: disabled payment link`);
+    sendInscriptionEmail(values[row-1], row, email, inscriptionTimeFormatted);
+    Logger.log(`doPost for ${email}: sent inscription email`);
+    return ContentService
+      .createTextOutput(JSON.stringify({ status: "OK" }))
+      .setMimeType(ContentService.MimeType.JSON);
   } catch (err) {
     return ContentService.createTextOutput("Error: " + err.message).setMimeType(ContentService.MimeType.TEXT);
   }
