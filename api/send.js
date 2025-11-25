@@ -95,9 +95,10 @@ export default async function handler(req, res) {
                 error: 'Missing required fields: to, subject, html'
             });
         }
-
-        if (!isValidEmail(to)) {
-            return res.status(400).json({ error: 'Invalid email address' });
+        for (const email of to) {
+            if (!isValidEmail(email)) {
+                return res.status(400).json({ error: 'Invalid email address' });
+            }
         }
 
         if (subject.length > 200) {
@@ -206,7 +207,7 @@ export default async function handler(req, res) {
                 name: 'Trail Intercasteller',
                 address: STRATO_USER
             },
-            to,
+            bcc: to,
             subject,
             text: ' ',
             html: sanitizedHtml,
